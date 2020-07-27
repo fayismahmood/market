@@ -31,13 +31,18 @@ function rout(app){
 
 
     app.get(['/','/store','/login','/register'], function(req, res) {
+       
+        if(req.session.UserData){
+            var full_data=
+            db.get("users").filter({
+                email:req.session.UserData.email
+            }).value()[0]
+            console.log(full_data)
+            res.render('index',{sessionID:req.sessionID,data:{email:full_data.email,name:full_data.name}});
+
+        }
         
-        var full_data=
-        db.get("users").filter({
-            email:req.session.UserData.email
-        }).value()[0]
-        console.log(full_data)
-        res.render('index',{sessionID:req.sessionID,data:{email:full_data.email,name:full_data.name}});
+        res.render('index',{sessionID:null,data:null});
     });
 
     app.get("/api.products/", function(req, res) {

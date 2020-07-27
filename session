@@ -1,0 +1,17 @@
+[
+  {
+    "_id": "XlnjZ5zikW0Z7lIBOcNiXg3ZwzNmb0qG",
+    "session": {
+      "cookie": {
+        "originalMaxAge": null,
+        "expires": null,
+        "httpOnly": true,
+        "path": "/"
+      },
+      "UserData": {
+        "email": "asdfdf@dd"
+      }
+    },
+    "expires": 1595933809205
+  }
+]

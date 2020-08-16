@@ -1,0 +1,80 @@
+.orderBack{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #10013a8c;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    .orderArea{
+        align-self: center;
+        vertical-align: middle;
+
+        background: white;
+        width:80%;
+        height:80vh;
+        padding: 10px 20px;
+        border-radius: 10px;
+        h1{
+            font-weight: 700;
+        }
+        ._cont{
+            display: flex;
+            position: relative;
+            .Item_review{
+                width: 60%;
+                height:calc(80vh - 80px);
+
+                display: flex;
+                flex-direction: row;
+
+                .itemName{
+                    width: 150px;
+                    margin: 15px;
+
+                    &>div>*{
+                        height: 40px;
+                        line-height: 40px;
+                       
+                    }
+                }
+                .count,.price,.TotalPrice{
+                    width: 120px;
+                    margin: 15px;
+                    &>div>*{
+                        height: 40px;
+                        line-height: 40px;
+                        
+                    }
+                }
+            }
+            .bill{
+                width:40%;
+                padding: 20px;
+                
+                &>div{
+                    height:calc(80vh - 100px);
+                    .TotalAmount{
+                        font-weight: lighter;
+                        font-size: 65px;
+                    }
+                    
+                }
+            }
+        }
+    }
+}
+._Final{
+    position: absolute;
+    z-index: 5;
+    align-self: center;
+    vertical-align: middle;
+
+    background: white;
+    width:80%;
+    height:80vh;
+    padding: 10px 20px;
+    border-radius: 10px;
+}

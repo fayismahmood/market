@@ -1,18 +1,21 @@
 import React from "react"              
 import ReactDom from "react-dom"
-import { Layout,Menu, Button,Input, Avatar } from 'antd'; 
+import { Layout,Menu,Badge, Button,Input, Avatar,Popover } from 'antd'; 
 
 
 import {HomeOutlined,ShopOutlined,LoginOutlined,ShoppingCartOutlined} from "@ant-design/icons"
 const { SubMenu } = Menu;
 const {Header,Content} = Layout;
 
+import {Get} from './content/funcs'
 
 import {Home} from "./content/Home"
 import {Store} from "./content/Store"
 import Login from './content/Login'
 import Register from './content/Register'
+import Cart from "./content/Cart"
 
+import Order from './content/Order'
 
 import "./index.less"
 
@@ -29,18 +32,47 @@ class App extends React.Component{
         super()
         this.state={
             UserData:data,
-            sessionID:sessionID
+            sessionID:sessionID,
+            cart:[],
+           
         }
+    }
+    componentWillMount(){
+        
+        for(var _e in cart){
+            Get(`/api.products/${cart[_e]}`,(data)=>{
+                var _Cart=this.state.cart.slice()
+                _Cart.push(data)
+                this.setState({
+                    cart:_Cart,
+                    
+                },()=>{
+                    console.log(this.state.cart)
+                }
+                )
+            })
+        }
+        
     }
     render(){
         var LoginData=()=>{
-            if(this.state.sessionID){
-              return(<div>
-                        <Avatar>fg</Avatar>
+           
+            if(this.state.UserData){
+                const content = (
+                    <div style={{display:"inline-block",}}>
                         <div>
                             <span>{this.state.UserData.name}</span><br/>
                             <span>{this.state.UserData.email}</span>
                         </div>
+                        <div>
+                            <Button type="dashed">Logout</Button>
+                        </div>
+                    </div>
+                  );
+                return(<div style={{display:"inline-block",cursor:"pointer"}}> 
+                        <Popover content={content}>
+                            <Avatar><LoginOutlined/></Avatar>
+                        </Popover>
                     </div>)
             }else{
                 return( 
@@ -50,6 +82,34 @@ class App extends React.Component{
                 </Button>
             </Link>)
             }
+        }
+        var AddtoCart=(arr)=>{
+            Get(`/api.products/${arr}`,(data)=>{
+                var cart=this.state.cart.slice()
+                cart.push(data)
+                this.setState({
+                   cart:cart
+               },
+               ()=>{
+                   console.log(this.state.cart)
+               })
+            })
+               
+            }
+        var RemoveFromCart=(arr)=>{
+            var cart=this.state.cart.slice()
+                cart.splice(cart.indexOf(arr),1)
+                this.setState({
+                   cart:cart
+               },
+               ()=>{
+                   console.log(this.state.cart)
+               })
+        }
+        var opnOdr=()=>{
+            this.setState({
+                opnOrd:true
+            })
         }
         return(
             <Router>
@@ -68,9 +128,12 @@ class App extends React.Component{
                         </Menu>
                         <div className="Head_tool">
                             {LoginData()}
-                           
-                            
-                            <Button shape="circle" icon={<ShoppingCartOutlined />}></Button>
+                           <Popover  placement="bottom" getPopupContainer={trigger => trigger.parentNode} content={<Cart RemoveFromCart={RemoveFromCart}  cart={this.state.cart}/>}>
+                                <Badge count={this.state.cart.length}>
+                                    <Button shape="circle" icon={<ShoppingCartOutlined />}></Button>
+                                </Badge>
+                           </Popover>
+                            {this.state.opnOdr&&<Order></Order>}
                             <Input.Search style={{borderRadius:"10px"}}
                             placeholder="input search text"
                             onSearch={value => console.log(value)}
@@ -81,13 +144,16 @@ class App extends React.Component{
                     <Content style={{marginTop:"64px"}}>
                         <Switch>
                             <Route path="/store">
-                                <Store />
+                                <Store a="df" AddtoCart={AddtoCart} cart={this.state.cart} />
                             </Route>
                             <Route path="/login">
                                <Login/>
                             </Route>
                             <Route path="/register">
                                <Register/>
+                            </Route>
+                            <Route path="/_getOrder">
+                               <Order Cart={this.state.cart} />
                             </Route>
                             <Route path="/">
                                 <Home />
@@ -100,6 +166,9 @@ class App extends React.Component{
     }
     
 }
+
+exports.App=App
+
 
 
 ReactDom.render(<App/>,document.getElementById("cont"))

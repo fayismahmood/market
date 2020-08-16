@@ -22,7 +22,10 @@ async function Post(url = '', data = {}) {
     });
     return response.json(); // parses JSON response into native JavaScript objects
 }
-
+// Post('https://example.com/answer', { answer: 42 })
+//   .then(data => {
+//     console.log(data); // JSON data parsed by `data.json()` call
+//   });
 
 
 exports.Get=Get

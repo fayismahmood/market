@@ -1,18 +1,23 @@
 import React,{useState} from "react"              
-import { Rate,Carousel,Button, Divider,Comment, Input } from 'antd'; 
+import { Rate,Carousel,Button,Popover, Divider,Comment, Input } from 'antd'; 
 import {ShoppingFilled,SendOutlined} from "@ant-design/icons"
 import {Get} from "./funcs"
+
+
+
+import {App} from "../index"
 
 import  './Store.less'
 import Product from "./product"
 
 class Store extends React.Component{
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state={
             products:[],
             types:[],
-            Popover:0
+            Popover:0,
+            cart:this.props.cart
         }
 
         this._EProd=this._EProd.bind(this)
@@ -27,6 +32,7 @@ class Store extends React.Component{
                 console.log(this.state.products)
             })
         })
+
         
     }
      _getFullType(i,e){
@@ -66,13 +72,13 @@ class Store extends React.Component{
     }
     _EProd(){
         var {types,products}=this.state;
-
+        
         return(
             <div>
                 {types.map((i,e)=>{
                     return(
                         <div key={e}>
-                            <_getFullType i={i} e={e} state={this.state}></_getFullType>
+                            <_getFullType i={i} e={e} cart={this.props.cart} AddtoCart={this.props.AddtoCart} state={this.state}></_getFullType>
                         </div> 
                     )
                 })}
@@ -93,7 +99,9 @@ class Store extends React.Component{
  class _getFullType extends React.Component {
     constructor(props){
         super(props)
-        
+        this.state={
+            cart:this.props.cart
+        }
     }
     render() {
         var {types,products}=this.props.state;
@@ -108,7 +116,7 @@ class Store extends React.Component{
                                   
                                    return(
                                        <div key={i}>
-                                            <_EProd prod={prod}/>
+                                            <_EProd cart={this.props.cart} AddtoCart={this.props.AddtoCart} prod={prod}/>
                                        </div>
                                        
                                    )
@@ -125,7 +133,8 @@ class _EProd extends React.Component {
     constructor(props){
         super(props)
         this.state={
-            ProdDet:false
+            ProdDet:false,
+            cart:this.props.cart
         }
     }
     render() {
@@ -155,7 +164,7 @@ class _EProd extends React.Component {
                         <Rate allowHalf defaultValue={prod.rating}></Rate>
                     </div>
                 </div>
-                {this.state.ProdDet&&<ProdDet close={CloseDet} _id={prod.id}/>}   
+                {this.state.ProdDet&&<ProdDet cart={this.props.cart} AddtoCart={this.props.AddtoCart} close={CloseDet} _id={prod.id}/>}   
             </div>
 
         )
@@ -167,11 +176,12 @@ class ProdDet extends React.Component{
     constructor(props){
         super(props)
         this.state={
-            data:{}
+            data:{},
+            cart:this.props.cart
         }
     }
     componentDidMount(){
-        console.log(this.props._id,"eeeeeee");
+
         Get(`/api.products/${this.props._id}`,(data)=>{
             this.setState({
                 data:data
@@ -192,7 +202,19 @@ class ProdDet extends React.Component{
             this.props.close()
             e.stopPropagation()
         }
-        var {title,type,description,price,rating}=this.state.data
+        var {title,id,type,description,price,rating}=this.state.data
+        var AddToCart=(id)=>{
+            Post('/_addToCart', { item: id })
+                .then((data) => {
+                    
+                    this.props.AddtoCart(id)
+                    //console.log(data); // JSON data parsed by `data.json()` call
+                });
+        }
+        var a=()=>{
+            console.log(this.props.cart.filter(e=>e.id==0).length!==0,"eeewww")
+        }
+    
         return(
             <div onClick={Close} className="ModelBack">
                <div onClick={(e)=>{e.stopPropagation()}} className="Model">
@@ -245,9 +267,12 @@ class ProdDet extends React.Component{
                             </div>
                         </div>
                     </div>
+                    
                     <div className="action">
-                        <Button icon={<ShoppingFilled/>}>Add to Cart</Button>
-                        <Button type="primary" icon={<ShoppingFilled/>}>Buy</Button>
+                        {id}
+                        {a()}
+                        <Button disabled={this.props.cart.filter(e=>e.id==id).length!==0} onClick={()=>{AddToCart(id)}} icon={<ShoppingFilled/>}>Add to Cart</Button>
+                        <Button disabled={this.props.cart.includes(id)} type="primary" icon={<ShoppingFilled/>}>Buy</Button>
                     </div>
                </div>
             </div>

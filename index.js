@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 
 var rout= require("./func/routs")
+var AdminRout=require("./func/adminRout")
 
 
 // set the view engine to ejs
@@ -12,5 +13,6 @@ app.use(express.static('dist'))
 // index page 
 
 rout.rout(app)
+AdminRout.adminRout(app)
 app.listen(8080);
 

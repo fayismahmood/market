@@ -1,17 +1,14 @@
 [
   {
-    "_id": "XlnjZ5zikW0Z7lIBOcNiXg3ZwzNmb0qG",
+    "_id": "na4u-5J6BQiqdoH7cqDqng8e2QSOXPsm",
     "session": {
       "cookie": {
         "originalMaxAge": null,
         "expires": null,
         "httpOnly": true,
         "path": "/"
-      },
-      "UserData": {
-        "email": "asdfdf@dd"
       }
     },
-    "expires": 1595933809205
+    "expires": 1596736391498
   }
 ]

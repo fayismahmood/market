@@ -15,18 +15,18 @@ export default class Register extends Component {
                     </h1>
                     <form method="Post" action="/Register">
                         <Form.Item>
+                            <label>Name</label>
+                            <Input name="name" type="text"></Input>
+                        </Form.Item>
+
+                        <Form.Item>
                             <label>Email</label>
                             <Input name="email" type="email"></Input>
                         </Form.Item>
 
                         <Form.Item>
-                            <label>Name</label>
-                            <Input name="name" type="email"></Input>
-                        </Form.Item>
-
-                        <Form.Item>
                             <label>Password</label>
-                            <Input name="pass" name="password" type="password"></Input>
+                            <Input name="pass" type="password"></Input>
                         </Form.Item>
                         <Form.Item>
                             <label>Re Enter Password</label>

@@ -10,19 +10,13 @@
 </body>
 </html>
 <script>
-    <%
-        if(sessionID&&data){
-            %>
+    
+           
             var sessionID="<%-sessionID%>"  
-            var data=<%- JSON.stringify(data)%>
-            <%
-        }else{
-            %>
-            var sessionID=null
-            var data=null
-            <%
-        }
-    %>
+            var data=<%- JSON.stringify(data) %>
+            var cart=[<%- cart %>]
+            
+            
   
 </script>
 <script src="/index.js"></script>

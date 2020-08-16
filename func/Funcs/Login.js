@@ -16,13 +16,13 @@ function Login (req, res) {
          if(Email[0].pass==pass){
              req.session.UserData = {
                  email:email,
-                 email:Email[0].email
+                 name:Email[0].name
              }
              res.redirect("../")
-             console.log("erdadf",Email[0].pass,pass)
+             
          }else{
              res.redirect("/Login/?status=Invalid Password")
-             console.log("erdadf",Email,pass)
+             
 
          }
      }

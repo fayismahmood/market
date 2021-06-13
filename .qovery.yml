@@ -1,0 +1,11 @@
+---
+application:
+  name: "market"
+  project: "ftest"
+  organization: "QoveryCommunity"
+routers:
+- name: "main-market"
+  routes:
+  - application_name: "market"
+    paths:
+    - "/*"
